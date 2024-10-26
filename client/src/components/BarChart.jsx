@@ -2,20 +2,22 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { getBarChartData } from '../api';
+import { Chart, registerables } from 'chart.js';
+
+// Register all required components
+Chart.register(...registerables);
 
 const BarChart = ({ selectedMonth }) => {
     const [chartData, setChartData] = useState({});
-    console.log(chartData);
-    
+
     useEffect(() => {
         const fetchBarChartData = async () => {
             try {
                 const data = await getBarChartData(selectedMonth);
-            
-                const labels = Object.keys(data); 
+                const labels = Object.keys(data); // Price ranges
                 const datasets = [{
                     label: 'Number of Transactions',
-                    data: Object.values(data),
+                    data: Object.values(data), // Counts for each range
                     backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 }];
                 
@@ -29,16 +31,14 @@ const BarChart = ({ selectedMonth }) => {
     }, [selectedMonth]);
 
     return (
-        // <div>
-        //     <h2>Bar Chart</h2>
-        //     {chartData.labels ? (
-        //         <Bar data={chartData} />
-        //     ) : (
-        //         <p>Loading chart data...</p>
-        //     )}
-        // </div>
-
-        <div></div>
+        <div>
+            <h2>Bar Chart</h2>
+            {chartData.labels ? (
+                <Bar data={chartData} />
+            ) : (
+                <p>Loading chart data...</p>
+            )}
+        </div>
     );
 };
 
